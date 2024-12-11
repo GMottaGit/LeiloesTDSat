@@ -10,8 +10,7 @@ public class ProdutosDAO {
 
     conectaDAO db = new conectaDAO();
     Connection conn = db.connectDB();
-    PreparedStatement prep;
-    ResultSet resultset;
+    
     ArrayList<ProdutosDTO> listagem = new ArrayList<>();
 
     public void cadastrarProduto(ProdutosDTO produto) {
@@ -25,14 +24,30 @@ public class ProdutosDAO {
             JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso.");
             conn.close();
         } catch (SQLException e) {
-            System.out.println("Erro ao cadastrar produto: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Não foi possivel cadastrar o produto.");
 
         }
     }
 
     public ArrayList<ProdutosDTO> listarProdutos() {
-
+        try{
+        String sql = "SELECT * FROM produtos";
+        PreparedStatement smts = this.conn.prepareStatement(sql);
+        ResultSet rs = smts.executeQuery(); 
+        ArrayList<ProdutosDTO> listagem = new ArrayList<>();
+        while(rs.next()){
+          ProdutosDTO prod = new ProdutosDTO();
+          prod.setId(rs.getInt("id"));
+          prod.setNome(rs.getString("nome"));
+          prod.setValor(rs.getInt("valor"));
+          prod.setStatus(rs.getString("status"));
+          listagem.add(prod);
+        }
         return listagem;
+        }
+        catch(Exception ex){
+            return null;
+        }
     }
 
 }
