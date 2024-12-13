@@ -8,7 +8,7 @@ public class conectaDAO {
 
     public Connection connectDB() {
         try {
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/uc11", "root", "12345678");;
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/uc11", "root", "12345678");
             return conn;
         } catch (SQLException erro) {
             JOptionPane.showMessageDialog(null, "Erro ConectaDAO" + erro.getMessage());

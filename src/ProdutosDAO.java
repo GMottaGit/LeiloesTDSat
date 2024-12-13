@@ -22,7 +22,7 @@ public class ProdutosDAO {
             smts.setString(3, produto.getStatus());
             smts.execute();
             JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso.");
-            conn.close();
+            db.desconectar(conn);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Não foi possivel cadastrar o produto.");
 
@@ -49,5 +49,40 @@ public class ProdutosDAO {
             return null;
         }
     }
-
+    
+    public void venderProduto(int id){
+        String sql = "UPDATE produtos SET status=? WHERE id=?";
+        try{
+         PreparedStatement stmt = this.conn.prepareStatement(sql);
+         stmt.setString(1, "Vendido");
+         stmt.setInt(2, id);
+         stmt.execute();
+         conn.close();
+        }
+        catch(Exception ex){
+            JOptionPane.showMessageDialog(null, "Não foi possivel vender o produto.");
+            
+        }
+    }
+ public ArrayList<ProdutosDTO> listarProdutosVendidos() {
+        try{
+        String sql = "SELECT * FROM produtos WHERE status=?";
+        PreparedStatement smts = this.conn.prepareStatement(sql);
+        smts.setString(1, "Vendido");
+        ResultSet rs = smts.executeQuery(); 
+        ArrayList<ProdutosDTO> listagem = new ArrayList<>();
+        while(rs.next()){
+          ProdutosDTO prod = new ProdutosDTO();
+          prod.setId(rs.getInt("id"));
+          prod.setNome(rs.getString("nome"));
+          prod.setValor(rs.getInt("valor"));
+          prod.setStatus(rs.getString("status"));
+          listagem.add(prod);
+        }
+        return listagem;
+        }
+        catch(Exception ex){
+            return null;
+        }
+    }
 }
