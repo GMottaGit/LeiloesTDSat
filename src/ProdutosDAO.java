@@ -22,7 +22,7 @@ public class ProdutosDAO {
             smts.setString(3, produto.getStatus());
             smts.execute();
             JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso.");
-            conn.close();
+            db.desconectar(conn);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Não foi possivel cadastrar o produto.");
 
@@ -47,6 +47,21 @@ public class ProdutosDAO {
         }
         catch(Exception ex){
             return null;
+        }
+    }
+    
+    public void venderProduto(int id){
+        String sql = "UPDATE produtos SET status=? WHERE id=?";
+        try{
+         PreparedStatement stmt = this.conn.prepareStatement(sql);
+         stmt.setString(1, "Vendido");
+         stmt.setInt(2, id);
+         stmt.execute();
+         conn.close();
+        }
+        catch(Exception ex){
+            JOptionPane.showMessageDialog(null, "Não foi possivel vender o produto.");
+            
         }
     }
 
